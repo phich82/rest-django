@@ -13,7 +13,7 @@ class DemoSerializer(serializers.Serializer):
     language = serializers.ChoiceField(choices=LANGUAGE_CHOICES, default='python')
     style = serializers.ChoiceField(choices=STYLE_CHOICES, default='friendly')
     owner = serializers.ReadOnlyField(source='owner.username')
-    
+
     def create(self, validated_data):
         """
         Create and return a new `Demo` instance, given the validated data.

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "app.quickstart",
     "demo"
-    
+
 ]
 
 MIDDLEWARE = [
@@ -123,3 +123,29 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+APPEND_SLASH=False
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ],
+    'EXCEPTION_HANDLER': 'app.exceptions.custom_exception_handler',
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle', # for guest user
+        'rest_framework.throttling.ScopedRateThrottle', # restrict access to specific parts of the API
+        'app.core.Throttle.RandomRateThrottle',
+        'app.core.Throttle.BurstRateThrottle',
+        'app.core.Throttle.SustainedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        # second, minute, hour or day
+        'anon': '20/day', # restrict access to guest user: maximum of 20 requests per day
+        # 'burst': '6/min', # restrict access (authenticated user) to api: maximum of 6 requests per minute
+        # 'sustained': '10/day', # restrict access (authenticated user) to api: maximum of 10 requests per day
+        'list-demo': '5/second', # restrict access (authenticated user) to api: maximum of 5 requests per second
+    }
+}
